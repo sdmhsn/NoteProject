@@ -61,7 +61,7 @@ class Category(models.Model):
 class Note(models.Model):
     title = models.CharField(max_length=255, blank=True, null=False)
     description = models.TextField(blank=False)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='note')
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='note')  # related_name: digunakan untuk memanggil suatu model melalui model lainnya (_set.) / relasi terbalik. sehingga field category yang terdapat pada model Note, dapat dipanggil melalui model Category. namun, bukan menggunakan _set lagi, tapi dengan menggunakan 'note'
     user = models.ForeignKey(UserAccount, on_delete=models.CASCADE)
 
     def __str__(self):
