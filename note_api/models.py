@@ -48,3 +48,21 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return f'{self.name} - {self.email}'
+
+
+class Category(models.Model):
+    user = models.ForeignKey(UserAccount, on_delete=models.CASCADE)
+    name = models.CharField(max_length=255, blank=False, null=False)
+
+    def __str__(self):
+        return self.name
+
+
+class Note(models.Model):
+    title = models.CharField(max_length=255, blank=True, null=False)
+    description = models.TextField(blank=False)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='note')
+    user = models.ForeignKey(UserAccount, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.title
