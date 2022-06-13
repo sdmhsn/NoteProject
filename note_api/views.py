@@ -139,11 +139,11 @@ class CategoryViewSet(viewsets.ViewSet):
                 'data': {}
             })
 
-    @action(detail=True, methods=['get'])
+    @action(detail=False, methods=['get'])
     def notes(self, request):
-        category = Category.objects.prefetch_related(
-            'notes').filter(user=request.user)
-        serializer = CategoryDescriptiveSerializer(category, many=True)
+        categories = Category.objects.prefetch_related(
+            'note').filter(user=request.user)
+        serializer = CategoryDescriptiveSerializer(categories, many=True)
         return Response({
             'message': 'Success',
             'status': True,
@@ -157,7 +157,7 @@ class NoteViewSet(viewsets.ViewSet):
     serializer_class = NoteDescriptiveSerializer
 
     def list(self, request):
-        notes = Note.objects.selected_related('user').filter(user=request.user)
+        notes = Note.objects.select_related('user').filter(user=request.user)
         serializer = NoteDescriptiveSerializer(notes, many=True)
         return Response({
             'message': 'Success',
@@ -196,7 +196,7 @@ class NoteViewSet(viewsets.ViewSet):
                 'status': True,
                 'data': serializer.data
             })
-    
+
     def partial_update(self, request, pk=None):
         note = Note.objects.filter(id=pk).first()
         if note is None:
